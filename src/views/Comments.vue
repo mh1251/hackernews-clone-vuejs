@@ -29,7 +29,6 @@
           >
         </div>
       </div>
-
       <comment v-for="kid in storyItem.kids" :key="kid.id" :comment="kid"></comment>
     </div>
   </div>

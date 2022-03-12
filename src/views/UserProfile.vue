@@ -30,6 +30,7 @@ created() {
   flex-direction: column;
   justify-content: center;
   padding:50px;
+  background: white
 }
 
 p {

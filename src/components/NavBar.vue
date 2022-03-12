@@ -1,11 +1,26 @@
 <template>
      <div id="nav-bar">
-        <div> <router-link :to="{ path: '/stories/newstories' }">NEW</router-link> </div>
-        <div> <router-link :to="{ path: '/stories/topstories' }">TOP</router-link> </div>
-        <div> <router-link :to="{ path: '/stories/jobstories' }">JOBS</router-link> </div>
-        <div> <router-link :to="{ path: '/stories/askstories' }">ASK HN</router-link> </div>
-        <div> <router-link :to="{ path: '/stories/showstories' }">SHOW HN</router-link> </div>
-        </diV>
+        <div>
+          <i><font-awesome-icon icon="fas fa-newspaper" /></i>
+          <router-link :to="{ path: '/stories/newstories' }">NEW</router-link> 
+        </div>
+        <div>
+          <i><font-awesome-icon icon="fas fa-fire" /></i>
+          <router-link :to="{ path: '/stories/topstories' }">TOP</router-link> 
+        </div>
+        <div>
+          <i><font-awesome-icon icon="fas fa-money-bill-1-wave" /></i>
+          <router-link :to="{ path: '/stories/jobstories' }">JOBS</router-link>
+        </div>
+        <div>
+          <i><font-awesome-icon icon="fas fa-question-circle" /></i>
+          <router-link :to="{ path: '/stories/askstories' }">ASK HN</router-link> 
+        </div>
+        <div>
+          <i><font-awesome-icon icon="fas fa-bullhorn" /></i>
+          <router-link :to="{ path: '/stories/showstories' }">SHOW HN</router-link> 
+        </div>
+      </diV>
 </template>
 
 <script>
@@ -45,6 +60,12 @@ a {
 a:hover {
   color:rgb(255, 116, 24)
 }
+
+i {
+  margin-right: 15px;
+}
+
+
 
 @media only screen and (max-width: 576px) {
   #nav-bar  {

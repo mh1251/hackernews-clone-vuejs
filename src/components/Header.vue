@@ -84,7 +84,7 @@ input {
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
   height: 35px;
-  width: 300px
+  width: 25vw
 }
 
 
@@ -102,7 +102,8 @@ input {
     border-radius: 25px;
     padding: 5px 20px;
     background-color: rgb(255, 116, 24);
-    color: white
+    color: white;
+    height: 40px;
 }
 
 a {

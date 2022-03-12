@@ -1,15 +1,22 @@
 <template>
   <div id="container" :style="nodeMargin">
-    <div id="user-comment-info">
+    <div id="user-comment-info" v-show="comment.by">
       <div>
         by
         <router-link :to="'/user/' + comment.by">{{ comment.by }}</router-link>
         <span> {{ comment.time }} ago </span>
       </div>
       <div id="comment-text" v-html="comment.text">{{ comment.text }}</div>
-      
-      <div v-if="comment.kids">comments: {{ comment.kids }}</div>
-      <button v-show="comment.kids" v-if="!toogleChildren" id="toggle" @click="toggleChildren"> show replies + </button>
+
+      <div v-if="comment.kids">comments: {{ comment.kids.length }}</div>
+      <button
+        v-show="comment.kids"
+        v-if="!toogleChildren"
+        id="toggle"
+        @click="toggleChildren"
+      >
+        show replies +
+      </button>
     </div>
 
     <div v-if="comment.kids" v-show="showChildren">
@@ -33,16 +40,20 @@ export default {
       showChildren: false,
     };
   },
-  props: ["comment"],
-  spacing: {
-    type: Number,
-    default: 0,
+  props: {
+    comment: {
+      type: Object || Number
+    },
+    spacing: {
+      type: Number,
+      default: 0,
+    },
   },
 
   methods: {
     toggleChildren() {
-      return this.showChildren = !this.showChildren;
-    }   
+      return (this.showChildren = !this.showChildren);
+    },
   },
 
   computed: {
