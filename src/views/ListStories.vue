@@ -4,18 +4,27 @@
       <div id="pagination-btns">
         <button id="prev-btn" @click="changePageNumber(-1)">Previous</button>
         <button id="next-btn" @click="changePageNumber(1)">Next</button>
-        <span style="color: gray; font-size: small"
-          >page: <span id="page-number">{{ pageNum }}</span></span
-        >
+        <span style="color: gray; font-size: small">page: 
+          <span id="page-number">{{ pageNum }}</span>
+        </span>
       </div>
-      <div id="time-filters">
+
+      <div id="sort-by">
+        <span style="color: gray">SORT BY:  </span>
+        <label for="popularity">POPULARITY</label>
+        <input type="radio" id="popularity" name="story-sort" checked @click="changeSortingValue('popularity')"/>
+        <label for="date" >DATE</label>
+        <input type="radio" id="popularity" name="story-sort" @click="changeSortingValue('date')"/>
+      </div>
+
+      <!-- <div id="time-filters">
         <label for="24h">Last 24h</label>
         <input type="radio" id="24h" name="time" checked />
         <label for="past-week">Past Week</label>
         <input type="radio" id="past-week" name="time" />
         <label for="past-month">Past Month</label>
         <input type="radio" id="past-month" name="time" />
-      </div>
+      </div> -->
     </div>
     <SpinnerComponent v-show="!isLoaded"></SpinnerComponent>
     <StoryItem
@@ -40,6 +49,7 @@ export default {
       stories: [],
       comments: [],
       pageNum: 0,
+      sortBy: 'popularity',
       isLoaded: true,
       Hackernews: new HackernewsAPI(),
     };
@@ -55,15 +65,7 @@ export default {
       this.pageNum = 0;
     });
 
-    this.isLoaded = false;
-    this.Hackernews.fetchStories(
-      this.$route.params.populatiryFilter,
-      this.pageNum
-    )
-      .then((data) => (this.stories = data))
-      .then(() => (this.isLoaded = true));
-
-
+    this.render(this.pageNum)
   },
 
 mounted() {
@@ -74,26 +76,16 @@ mounted() {
 },
 
   watch: {
-    "$route.params": {
+    "$route.params.storyType": {
       handler() {
-        this.isLoaded = false;
         this.pageNum = 0;
-        this.Hackernews.fetchStories(this.$route.params.populatiryFilter, 0)
-          .then((data) => (this.stories = data))
-          .then(() => (this.isLoaded = true));
+        this.render(0)
       },
     },
 
     pageNum: {
       handler() {
-        this.isLoaded = false;
-        this.Hackernews.fetchStories(
-          this.$route.params.populatiryFilter,
-          this.pageNum
-        )
-          .then((data) => (this.stories = data))
-          .then(() => (this.isLoaded = true))
-          .then(() => eventBus.$emit('changedPageNum'), this.pageNum);
+        this.render(this.pageNum)
       },
     },
   },
@@ -105,6 +97,19 @@ mounted() {
       } else {
         this.pageNum += x;
       }
+    },
+
+    render:  function(pageNumber) {
+      this.isLoaded = false;
+      this.Hackernews.fetchStories(this.$route.params.storyType, pageNumber, this.sortBy)
+          .then((data) => (this.stories = data))
+          .then(() => (this.isLoaded = true));
+    },
+
+    changeSortingValue:  function(x) {
+      this.sortBy = x;
+      this.pageNumber = 0;
+      this.render(0)
     },
   },
 };
@@ -126,9 +131,14 @@ mounted() {
   color: rgb(59, 59, 59);
 }
 
-#time-filters,
+#sort-by {
+  display: flex;
+  align-items: center;
+}
+#sort-by,
 #pagination-btns {
   display: flex;
-  gap: 5px;
+  color: black;
+  gap: 15px;
 }
 </style>

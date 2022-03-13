@@ -10,7 +10,7 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: "/stories/:populatiryFilter",
+      path: "/stories/:storyType",
       name: "ListStories",
       component: ListStories
     },

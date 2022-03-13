@@ -7,14 +7,13 @@ export default class HackernewsAPI {
     this.user_url = `${this.BaseUrl}user/`;
   }
 
-  fetchStories = (popularityFilter, pageNumber) => {
-    return fetch(`${this.BaseUrl}${popularityFilter}.json/`)
+  fetchStories = (popularityFilter, pageNumber, sortBy) => {
+    console.log(sortBy)
+    return fetch(`${this.BaseUrl}${popularityFilter}.json?orderBy="$key"&limitToFirst=200&print=pretty`)
       .then((data) => data.json())
       .then((data) => {
         let stories = data
-          .slice(pageNumber * 10, pageNumber * 10 + 10)
-          .map(x => fetch(`${this.item_url}${x}.json`))
-
+          .map(x => fetch(`${this.item_url}${x}.json`))         
 
         return Promise.all(stories)
           .then((responses) => {
@@ -22,12 +21,22 @@ export default class HackernewsAPI {
               return response.json();
             }));
           })
-          .then(data => data)
+          .then(data => this.sortByType(data, sortBy))
+          .then(data => data.slice(pageNumber * 10, pageNumber * 10 + 10))
           .catch((error) => {
             console.log(error);
           });
       });
   }
+
+  sortByType = (returnedData, sortType) => {
+    if(sortType == 'popularity'){
+      return returnedData.sort((a,b) => b.score - a.score)
+    }else{
+      return returnedData.sort((a,b) =>  b.time - a.time)
+    }
+  }
+ 
 
   getUser = (user) => {
     return fetch(`${this.user_url}${user}.json`).then(res => res.json());
