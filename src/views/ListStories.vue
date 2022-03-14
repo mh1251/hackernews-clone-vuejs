@@ -51,7 +51,7 @@ export default {
       pageNum: 0,
       sortBy: 'popularity',
       isLoaded: true,
-      Hackernews: new HackernewsAPI(),
+      Hackernews: new HackernewsAPI()
     };
   },
   components: {
@@ -140,5 +140,18 @@ mounted() {
   display: flex;
   color: black;
   gap: 15px;
+}
+
+@media only screen and (max-width: 576px) {
+
+  #pagination-btns, #sort-by {
+  gap: 5px;
+  height: 30px;
+  width: auto;
+  display: flex;
+  align-items: center;
+}
+
+
 }
 </style>

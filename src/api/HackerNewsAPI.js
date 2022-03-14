@@ -8,43 +8,29 @@ export default class HackernewsAPI {
   }
 
   fetchStories = (popularityFilter, pageNumber, sortBy) => {
-    console.log(sortBy)
-    return fetch(`${this.BaseUrl}${popularityFilter}.json?orderBy="$key"&limitToFirst=200&print=pretty`)
-      .then((data) => data.json())
+    let stories = [];
+     return axios.get(`${this.BaseUrl}${popularityFilter}.json?orderBy="$key"&limitToFirst=100&print=pretty`)
       .then((data) => {
-        let stories = data
-          .map(x => fetch(`${this.item_url}${x}.json`))         
-
-        return Promise.all(stories)
-          .then((responses) => {
-            return Promise.all(responses.map((response) => {
-              return response.json();
-            }));
+       let fetchedData = data.data.map((x) => axios.get(`${this.item_url}${x}.json`))
+        return Promise.all(fetchedData).then((data) => data)})
+          .then((data) => {
+            data.map((story) => {
+              stories.push(story.data)
+            })
           })
-          .then(data => this.sortByType(data, sortBy))
-          .then(data => data.slice(pageNumber * 10, pageNumber * 10 + 10))
+          .then(() => stories =  this.sortByType(stories, sortBy))
+          .then(() => stories = stories.slice(pageNumber * 10, pageNumber * 10 + 10))
+          .then(() => stories)
           .catch((error) => {
             console.log(error);
-          });
       });
   }
 
-  sortByType = (returnedData, sortType) => {
-    if(sortType == 'popularity'){
-      return returnedData.sort((a,b) => b.score - a.score)
-    }else{
-      return returnedData.sort((a,b) =>  b.time - a.time)
-    }
-  }
- 
-
   getUser = (user) => {
-    return fetch(`${this.user_url}${user}.json`).then(res => res.json());
+    return axios.get(`${this.user_url}${user}.json`).then(res => res.data);
   }
 
-
-  //Napraveno so drugo api - ALGOLIA API za search-anje samo nema za jobs (ima frontpage stories(topstories), showHN, askHN)
-
+//Napraveno so drugo api - ALGOLIA API za search-anje samo nema za jobs (ima frontpage stories(topstories), showHN, askHN)
   userSearchInput = (value, storyType, pageNumber) => {
     let stories = [];
     return axios.get(`http://hn.algolia.com/api/v1/search?query=${value}&tags=${storyType}&page=${pageNumber}`)
@@ -66,6 +52,14 @@ export default class HackernewsAPI {
           })
       })
       .then(() => stories)
+  }
+
+  sortByType = (returnedData, sortType) => {
+    if(sortType == 'popularity'){
+      return returnedData.sort((a,b) => b.score - a.score)
+    }else{
+      return returnedData.sort((a,b) =>  b.time - a.time)
+    }
   }
 }
 

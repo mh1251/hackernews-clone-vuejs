@@ -8,14 +8,14 @@
       </div>
       <div id="comment-text" v-html="comment.text">{{ comment.text }}</div>
 
-      <div v-if="comment.kids">comments: {{ comment.kids.length }}</div>
+      <div v-if="comment.kids" style="font-weight: 500">replies: {{ comment.kids.length }}</div>
       <button
         v-show="comment.kids"
         v-if="!toogleChildren"
         id="toggle"
         @click="toggleChildren"
       >
-        show replies +
+      {{button.text}}
       </button>
     </div>
 
@@ -38,6 +38,9 @@ export default {
   data: function () {
     return {
       showChildren: false,
+      button: {
+      text: 'Show replies +'
+    }
     };
   },
   props: {
@@ -52,7 +55,8 @@ export default {
 
   methods: {
     toggleChildren() {
-      return (this.showChildren = !this.showChildren);
+      this.showChildren = !this.showChildren;
+      this.button.text = this.showChildren ? 'Hide replies -' : 'Show replies +';
     },
   },
 
@@ -69,6 +73,7 @@ export default {
 <style scoped>
 #user-comment-info {
   border: 1px solid rgb(201, 197, 197);
+  padding: 10px 15px;
 }
 
 #container {

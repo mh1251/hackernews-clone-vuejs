@@ -19,6 +19,7 @@
       content-cols-sm
       label="Enter your email"
       label-for="input-horizontal"
+     
     >
     <b-form-input id="input-horizontal"></b-form-input>
     </b-form-group> 

@@ -1,7 +1,7 @@
 <template>
-  <div style="margin: 5px; background-color: white">
-    <SpinnerComponent v-show="!isLoaded"></SpinnerComponent>
+  <div style="margin: 0px; background-color: white">
     <div v-show="storyItem">
+     
       <div id="main-story-info">
         <div id="title">
           <span class="highlight">{{ storyItem.title }}</span>
@@ -28,7 +28,8 @@
             comments</span
           >
         </div>
-      </div>
+      </div> 
+      <SpinnerComponent v-show="!isLoaded"></SpinnerComponent>
       <comment v-for="kid in storyItem.kids" :key="kid.id" :comment="kid"></comment>
     </div>
   </div>
@@ -37,6 +38,7 @@
 <script>
 import comment from "../components/Comment.vue";
 import SpinnerComponent from "../components/Spinner.vue";
+import axios from 'axios'
 
 export default {
   name: "Comments",
@@ -55,9 +57,9 @@ export default {
   methods: {
     getKids: function () {
       this.storyItem = {}
-      fetch(`https://hacker-news.firebaseio.com/v0/item/${this.id}.json`)
-        .then((response) => response.json())
-        .then((response) => (this.storyItem = response))
+      axios.get(`https://hacker-news.firebaseio.com/v0/item/${this.id}.json`)
+        // .then((response) => response.json())
+        .then((response) => (this.storyItem = response.data))
         .then(() => {
           return this.populateComments(this.storyItem).then(() => this.isLoaded = true)
 
@@ -76,8 +78,8 @@ export default {
     populateComments: async function (object) {
       if (object.kids) {
         for (let i = 0; i < object.kids.length; i++) {
-          let item = await fetch(`https://hacker-news.firebaseio.com/v0/item/${object.kids[i]}.json`).then((data) => data.json());
-          object.kids[i] = await item;
+          let item = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${object.kids[i]}.json`);
+          object.kids[i] = await item.data;
           this.populateComments(object.kids[i]);
         }
       }

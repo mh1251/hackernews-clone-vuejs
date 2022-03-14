@@ -10,6 +10,14 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
+      path: "/",
+      name: "Home",
+      component: ListStories,
+      redirect: "/stories/newstories"
+
+
+    },
+    {
       path: "/stories/:storyType",
       name: "ListStories",
       component: ListStories

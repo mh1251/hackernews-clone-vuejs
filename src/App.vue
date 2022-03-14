@@ -32,13 +32,21 @@ export default {
   margin-top: 10px;
   overflow: hidden;
   background-color: rgb(243, 243, 243);
+  box-sizing: border-box;
 }
 
 .routerView {
   text-align: center;
+  background-color: white;
 }
 button {
   border: none;
+}
+
+@media only screen and (max-width: 576px) {
+  * {
+    font-size: 3vmin;
+  }
 }
 
 @import "~bootstrap/dist/css/bootstrap.css";
