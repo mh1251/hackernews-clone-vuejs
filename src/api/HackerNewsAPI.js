@@ -7,12 +7,13 @@ export default class HackernewsAPI {
     this.user_url = `${this.BaseUrl}user/`;
   }
 
-  fetchStories = (popularityFilter, pageNumber, sortBy) => {
+  fetchStories = (storyType, pageNumber, sortBy) => {
     let stories = [];
-     return axios.get(`${this.BaseUrl}${popularityFilter}.json?orderBy="$key"&limitToFirst=100&print=pretty`)
+     return axios.get(`${this.BaseUrl}${storyType}.json?orderBy="$key"&limitToFirst=100&print=pretty`)
       .then((data) => {
        let fetchedData = data.data.map((x) => axios.get(`${this.item_url}${x}.json`))
-        return Promise.all(fetchedData).then((data) => data)})
+        return Promise.all(fetchedData).then((data) => data)
+      })
           .then((data) => {
             data.map((story) => {
               stories.push(story.data)
